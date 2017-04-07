@@ -160,7 +160,7 @@ debconf-set-selections /debconf.set
 rm -f /debconf.set
 echo "root:raspberry" | chpasswd
 apt-get update 
-apt-get -y install git-core binutils ca-certificates wget curl lxde
+apt-get -y install git-core binutils ca-certificates wget curl
 wget https://raw.githubusercontent.com/Hexxeh/rpi-update/master/rpi-update -O /usr/bin/rpi-update
 chmod +x /usr/bin/rpi-update
 UPDATE_SELF=0 SKIP_BACKUP=1 /usr/bin/rpi-update
