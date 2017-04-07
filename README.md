@@ -1,2 +1,2 @@
 # debian-rpi
-Debian armhf, armel, and arm64 for all Raspberry Pi models
+Debian armhf, armel, and arm64 (coming soon) for all Raspberry Pi models
