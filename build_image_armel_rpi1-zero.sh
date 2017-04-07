@@ -11,7 +11,7 @@
 deb_mirror="http://debian.cc.lehigh.edu/debian"
 
 # Image size in Mb
-imagesize="3000"
+imagesize="1300"
 # Boot partition size
 bootsize="64M"
 deb_release="jessie"
