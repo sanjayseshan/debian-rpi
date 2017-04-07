@@ -1,0 +1,9 @@
+[Unit]
+Description=Resize filesystem to partition size
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/rpi-resize2fs start
+
+[Install]
+WantedBy=multi-user.target

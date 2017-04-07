@@ -1,0 +1,9 @@
+[Unit]
+Description=Initial system configuration: re-create SSH keys and resize partition
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/rpi-firstrun start
+
+[Install]
+WantedBy=multi-user.target
