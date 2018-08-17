@@ -14,7 +14,7 @@ deb_mirror="http://debian.cc.lehigh.edu/debian"
 imagesize="1300"
 # Boot partition size
 bootsize="64M"
-deb_release="jessie"
+deb_release="stretch"
 deb_arch="armel"
 scriptroot=$(pwd)
 # Build root
