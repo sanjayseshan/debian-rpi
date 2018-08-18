@@ -22,9 +22,8 @@ Pi3 bluetooth and wifi
 
 Instructions for arm64 (no current script):<br>
 See releases tab for debian version with everything working! Wifi and BT!
-To derive your own image see: https://wiki.gentoo.org/wiki/Raspberry_Pi_3_64_bit_Install
-You have to convert the instructions to work with Debian.
 
+See Releases tab for armv6hf image.
 
 
 
