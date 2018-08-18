@@ -53,7 +53,7 @@ fi
     image="$(pwd)/rpi_debian_${deb_arch}_${deb_release}_${mydate}.img"
 
 if [ "$device" == "" ]; then
-  echo "no block device given, creating an image"
+  echo "Creating an image"
   mkdir -p $buildenv
   dd if=/dev/zero of=$image bs=1MB count=$imagesize
   device=`losetup -f --show $image`
