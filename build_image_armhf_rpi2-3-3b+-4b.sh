@@ -4,7 +4,7 @@
 #
 # original by Klaus M Pfeiffer, http://www.kmp.or.at/~klaus/raspberry/build_rpi_sd_card.sh, 2012-06-24
 # updated by Dovydas Stepanavicius for Jessie, https://github.com/dovydas/rpi-jessie, 2015-10-12
-# updated by Sanjay Seshan for Stretch and rpi3b,3b+ - 2017-18
+# updated by Sanjay Seshan for Stretch and Buster and rpi3b,3b+ - 2017-18
 
 # you need at least
 # apt-get install binfmt-support qemu qemu-user-static debootstrap kpartx lvm2 dosfstools
@@ -14,8 +14,8 @@ deb_mirror="http://ftp.debian.org/debian"
 # Image size in Mb
 imagesize="1000"
 # Boot partition size
-bootsize="64M"
-deb_release="stretch"
+bootsize="128M"
+deb_release="buster"
 deb_arch="armhf"
 scriptroot=$(pwd)
 # Build root
@@ -161,17 +161,14 @@ chmod 600 root/.ssh/authorized_keys
 echo "#!/bin/bash
 debconf-set-selections /debconf.set
 useradd -m -s /bin/bash pi
-echo "root:raspberry" | chpasswd
-echo "pi:raspberry" | chpasswd
+echo 'root:raspberry' | chpasswd
+echo 'pi:raspberry' | chpasswd
 rm -f /debconf.set
 wget http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
 apt-key add raspberrypi.gpg.key
 apt-get update 
-apt-get -y --force-yes install pi-bluetooth git-core binutils ca-certificates wget curl raspi-config libraspberrypi-* nano wicd-ncurses
-wget 'http://archive.raspberrypi.org/debian/pool/main/f/firmware-nonfree/firmware-brcm80211_0.43+rpi4_all.deb'
-wget 'https://archive.raspberrypi.org/debian/pool/main/f/firmware-nonfree/firmware-brcm80211_20161130-3+rpt3_all.deb'
-dpkg -i firmware-brcm80211_0.43+rpi4_all.deb firmware-brcm80211_20161130-3+rpt3_all.deb
-wget https://raw.githubusercontent.com/Hexxeh/rpi-update/master/rpi-update -O /usr/bin/rpi-update
+apt-get -y --force-yes install binutils ca-certificates wget curl raspi-config libraspberrypi-* nano firmware-nonfree git pi-bluetooth firmware-brcm80211 
+wget http://raw.githubusercontent.com/Hexxeh/rpi-update/master/rpi-update -O /usr/bin/rpi-update
 chmod +x /usr/bin/rpi-update
 UPDATE_SELF=0 SKIP_BACKUP=1 /usr/bin/rpi-update
 apt-get --force-yes -y install locales console-common ntp openssh-server less vim parted
