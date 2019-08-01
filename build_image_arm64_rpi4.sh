@@ -4,7 +4,7 @@
 #
 # original by Klaus M Pfeiffer, http://www.kmp.or.at/~klaus/raspberry/build_rpi_sd_card.sh, 2012-06-24
 # updated by Dovydas Stepanavicius for Jessie, https://github.com/dovydas/rpi-jessie, 2015-10-12
-# updated by Sanjay Seshan for Stretch and Buster and rpi3b,3b+ - 2017-18
+# updated by Sanjay Seshan for Stretch and Buster and rpi3b,3b+,4b - 2017-19
 
 # you need at least
 # apt-get install binfmt-support qemu qemu-user-static debootstrap kpartx lvm2 dosfstools
@@ -16,7 +16,7 @@ imagesize="2000"
 # Boot partition size
 bootsize="128M"
 deb_release="buster"
-deb_arch="armhf"
+deb_arch="arm64"
 scriptroot=$(pwd)
 # Build root
 buildenv=$(pwd)/build
@@ -118,14 +118,14 @@ cd $rootfs
 echo "Bootstrapping the image"
 
 debootstrap --foreign --arch $deb_arch $deb_release $rootfs $deb_mirror
-cp /usr/bin/qemu-arm-static usr/bin/
+cp /usr/bin/qemu-aarch64-static usr/bin/
 LANG=C chroot $rootfs /debootstrap/debootstrap --second-stage
 
 mount $bootp $bootfs
 
 echo "deb $deb_mirror $deb_release main contrib non-free
 " > etc/apt/sources.list
-echo "deb http://archive.raspberrypi.org/debian $deb_release main ui
+echo "deb http://sanjay.seshan.org/debian/ $deb_release main
 " >> etc/apt/sources.list
 
 echo "dwc_otg.lpm_enable=0 console=ttyAMA0,115200 kgdboc=ttyAMA0,115200 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 rootwait" > boot/cmdline.txt
@@ -165,14 +165,16 @@ echo 'root:raspberry' | chpasswd
 echo 'pi:raspberry' | chpasswd
 rm -f /debconf.set
 apt-get install -y wget gnupg2 binutils
+wget -O - http://sanjay.seshan.org/debian/pirepo.gpg.key | apt-key add -
 wget http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
 apt-key add raspberrypi.gpg.key
 apt-get update 
-apt-get -y --force-yes install binutils ca-certificates wget curl raspi-config libraspberrypi-* nano firmware-nonfree git pi-bluetooth firmware-brcm80211 gnupg2
-wget http://raw.githubusercontent.com/Hexxeh/rpi-update/master/rpi-update -O /usr/bin/rpi-update
-chmod +x /usr/bin/rpi-update
-UPDATE_SELF=0 SKIP_BACKUP=1 /usr/bin/rpi-update
-apt-get --force-yes -y install locales console-common ntp openssh-server less vim parted raspberrypi-kernel
+apt-get download raspberrypi4-kernel
+dpkg -x raspberrypi3-* /tmp/
+mv /tmp/boot/* /boot
+mv /tmp/lib/modules /lib/
+apt-get -y --force-yes install binutils ca-certificates wget curl raspi-config libraspberrypi-* nano raspberrypi-firmware git gnupg2
+apt-get --force-yes -y install locales console-common ntp openssh-server less vim parted raspberrypi4-kernel
 sed -i -e 's/KERNEL\!=\"eth\*|/KERNEL\!=\"/' /lib/udev/rules.d/75-persistent-net-generator.rules
 rm -f /etc/udev/rules.d/70-persistent-net.rules
 rm -f third-stage
