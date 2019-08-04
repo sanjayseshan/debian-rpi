@@ -173,7 +173,7 @@ apt-get download raspberrypi3-kernel
 dpkg -x raspberrypi3-* /tmp/
 mv /tmp/boot/* /boot
 mv /tmp/lib/modules /lib/
-apt-get -y --force-yes install binutils ca-certificates wget curl raspi-config libraspberrypi-* nano raspberrypi-firmware git gnupg2
+apt-get -y --force-yes install binutils ca-certificates wget curl raspi-config nano raspberrypi-firmware git gnupg2
 apt-get --force-yes -y install locales console-common ntp openssh-server less vim parted raspberrypi3-kernel
 sed -i -e 's/KERNEL\!=\"eth\*|/KERNEL\!=\"/' /lib/udev/rules.d/75-persistent-net-generator.rules
 rm -f /etc/udev/rules.d/70-persistent-net.rules
