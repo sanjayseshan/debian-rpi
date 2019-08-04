@@ -127,6 +127,8 @@ echo "deb $deb_mirror $deb_release main contrib non-free
 " > etc/apt/sources.list
 echo "deb http://sanjay.seshan.org/debian/ $deb_release main
 " >> etc/apt/sources.list
+echo "deb [trusted=yes] http://ppa.launchpad.net/ubuntu-pi-flavour-makers/ppa/ubuntu bionic main
+" >> etc/apt/sources.list
 
 echo "dwc_otg.lpm_enable=0 console=ttyAMA0,115200 kgdboc=ttyAMA0,115200 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 rootwait" > boot/cmdline.txt
 
