@@ -172,11 +172,13 @@ wget http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
 apt-key add raspberrypi.gpg.key
 apt-get update 
 apt-get download raspberrypi4-kernel
-dpkg -x raspberrypi3-* /tmp/
+dpkg -x raspberrypi4-* /tmp/
+rm raspberrypi4-*
 mv /tmp/boot/* /boot
 mv /tmp/lib/modules /lib/
-apt-get -y --force-yes install binutils ca-certificates wget curl raspi-config libraspberrypi-* nano raspberrypi-firmware git gnupg2 pi-bluetooth
+apt-get -y --force-yes install sudo binutils ca-certificates wget curl raspi-config libraspberrypi-* nano raspberrypi-firmware git gnupg2 pi-bluetooth
 apt-get --force-yes -y install locales console-common ntp openssh-server less vim parted raspberrypi4-kernel
+echo 'pi  ALL=(ALL:ALL) ALL' >> /etc/sudoers
 sed -i -e 's/KERNEL\!=\"eth\*|/KERNEL\!=\"/' /lib/udev/rules.d/75-persistent-net-generator.rules
 rm -f /etc/udev/rules.d/70-persistent-net.rules
 rm -f third-stage
