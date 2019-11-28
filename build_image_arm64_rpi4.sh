@@ -176,8 +176,10 @@ dpkg -x raspberrypi4-* /tmp/
 rm raspberrypi4-*
 mv /tmp/boot/* /boot
 mv /tmp/lib/modules /lib/
-apt-get -y --force-yes install sudo binutils ca-certificates wget curl raspi-config libraspberrypi-* nano raspberrypi-firmware git gnupg2 pi-bluetooth
+apt-get -y --force-yes install sudo binutils ca-certificates wget curl libraspberrypi-* nano raspberrypi-firmware git gnupg2 pi-bluetooth
 apt-get --force-yes -y install locales console-common ntp openssh-server less vim parted raspberrypi4-kernel
+wget http://sanjay.seshan.org/debian/pool/main/r/raspi-config/raspi-config_20191116_all.deb
+dpkg -i raspi-config_20191116_all.deb
 echo 'pi  ALL=(ALL:ALL) ALL' >> /etc/sudoers
 sed -i -e 's/KERNEL\!=\"eth\*|/KERNEL\!=\"/' /lib/udev/rules.d/75-persistent-net-generator.rules
 rm -f /etc/udev/rules.d/70-persistent-net.rules
