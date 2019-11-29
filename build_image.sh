@@ -12,7 +12,7 @@
 deb_mirror="http://ftp.debian.org/debian"
 
 # Image size in Mb
-imagesize="2000"
+imagesize="2048"
 # Boot partition size
 bootsize="128M"
 deb_release="buster"
@@ -36,11 +36,11 @@ mydate=`date +%Y%m%d`
 usage() {
     echo " Build your own Raspberry Pi SD card
 
- original by Klaus M Pfeiffer, http://www.kmp.or.at/~klaus/raspberry/build_rpi_sd_card.sh, 2012-06-24
- updated by Dovydas Stepanavicius for Jessie, https://github.com/dovydas/rpi-jessie, 2015-10-12
- updated by Sanjay Seshan for Stretch and Buster and rpi3b,3b+,4b - 2017-19
+ Original by Klaus M Pfeiffer, http://www.kmp.or.at/~klaus/raspberry/build_rpi_sd_card.sh, 2012-06-24
+ Updated by Dovydas Stepanavicius for Jessie, https://github.com/dovydas/rpi-jessie, 2015-10-12
+ Updated by Sanjay Seshan for Stretch and Buster and rpi3b,3b+,4b - 2019-11-29
 
- You need at least
+ You need at least:
  apt-get install binfmt-support qemu qemu-user-static debootstrap kpartx lvm2 dosfstools
 
  Run raspi-config on first boot to expand sdcard. A 2 GB disk image will be generated.
@@ -58,6 +58,11 @@ usage() {
 }
 
 
+if [ "$1" == "" ] | [ "$2" == "" ] | [ "$3" == "" ] | [ "$4" == "" ] | [ "$5" == "" ] | [ "$6" == "" ] ; then
+    usage
+    exit
+fi
+   
 while [ "$1" != "" ]; do
     case $1 in
         -a | --arch )           shift
@@ -124,8 +129,8 @@ dpkg -x raspberrypi3-* /tmp/
 rm raspberrypi3-*
 mv /tmp/boot/* /boot
 mv /tmp/lib/modules /lib/
-apt-get -y --force-yes install sudo curl binutils ca-certificates wget curl libraspberrypi-* nano raspberrypi-firmware git gnupg2 pi-bluetooth
-apt-get --force-yes -y install locales console-common ntp openssh-server less vim parted raspberrypi3-kernel
+apt-get -y --force-yes install sudo curl binutils ca-certificates wget curl nano raspberrypi-firmware git gnupg2 pi-bluetooth
+apt-get --force-yes -y install locales console-common ntp openssh-server less vim parted
 wget http://sanjay.seshan.org/debian/pool/main/r/raspi-config/raspi-config_20191116_all.deb
 dpkg -i raspi-config_20191116_all.deb
 echo 'pi  ALL=(ALL:ALL) ALL' >> /etc/sudoers
@@ -171,6 +176,8 @@ wget http://raw.githubusercontent.com/Hexxeh/rpi-update/master/rpi-update -O /us
 chmod +x /usr/bin/rpi-update
 UPDATE_SELF=0 SKIP_BACKUP=1 /usr/bin/rpi-update
 apt-get --force-yes -y install locales console-common ntp openssh-server less vim parted
+wget http://archive.raspberrypi.org/debian/pool/main/r/raspberrypi-firmware/raspberrypi-kernel_1.20190925+1-1_armhf.deb
+dpkg --force-architecture -i raspberrypi-kernel_1.20190925+1-1_armhf.deb 
 sed -i -e 's/KERNEL\!=\"eth\*|/KERNEL\!=\"/' /lib/udev/rules.d/75-persistent-net-generator.rules
 rm -f /etc/udev/rules.d/70-persistent-net.rules
 rm -f third-stage
@@ -329,7 +336,7 @@ echo "Installing packages"
 LANG=C chroot $rootfs /third-stage
 
 echo "#!/bin/bash
-apt-get -f install
+apt-get -f -y --force-yes install
 apt-get clean
 rm -f cleanup
 service ntp stop
