@@ -12,9 +12,9 @@
 deb_mirror="http://ftp.debian.org/debian"
 
 # Image size in Mb
-imagesize="2048"
+imagesize="3096"
 # Boot partition size
-bootsize="128M"
+bootsize="512M"
 deb_release="buster"
 #deb_release=$3
 deb_arch="arm64"
