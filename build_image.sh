@@ -291,7 +291,6 @@ echo "deb $deb_mirror $deb_release main contrib non-free
 
 if [ "$deb_arch" == "arm64" ]; then 
     echo "deb http://sanjay.seshan.org/debian/ $deb_release main" >> etc/apt/sources.list
-    echo "deb [trusted=yes] http://ppa.launchpad.net/ubuntu-pi-flavour-makers/ppa/ubuntu bionic main" >> etc/apt/sources.list
 elif [ "$deb_arch" == "armhf" ]; then 
     echo "deb http://archive.raspberrypi.org/debian $deb_release main ui" >> etc/apt/sources.list
 elif [ "$deb_arch" == "armel" ]; then 
