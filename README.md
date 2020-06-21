@@ -30,4 +30,4 @@ On raspberry pi:
 * openssh-server is pre-installed but you have to connect it to the network
 * Install a GUI (optional) using `apt-get install xinit lightdm mate-desktop-environment-core`
 
-Based on worky by Klaus M Pfeiffer, http://www.kmp.or.at/~klaus/raspberry/build_rpi_sd_card.sh. Only works with a full linux kernel ....do not bother trying on WSL --> does not work.
+Based on work by Klaus M Pfeiffer (http://www.kmp.or.at/~klaus/raspberry/build_rpi_sd_card.sh).
