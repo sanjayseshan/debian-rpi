@@ -86,7 +86,6 @@ done
 echo "Building Debian $deb_release for the $pi_model using architecture $deb_arch ..."
 
 if [ "$deb_arch" == "arm64" ]; then 
-    if [ "$pi_model" == "rpi4" ]; then 
 	installPkg="#!/bin/bash
 debconf-set-selections /debconf.set
 useradd -m -s /bin/bash pi
@@ -98,48 +97,21 @@ wget -O - http://sanjay.seshan.org/debian/pirepo.gpg.key | apt-key add -
 wget http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
 apt-key add raspberrypi.gpg.key
 apt-get update 
-apt-get download raspberrypi4-kernel
-dpkg -x raspberrypi4-* /tmp/
-rm raspberrypi4-*
 mv /tmp/boot/* /boot
 mv /tmp/lib/modules /lib/
-apt-get -y --force-yes install curl sudo binutils ca-certificates wget curl libraspberrypi-* nano raspberrypi-firmware git gnupg2 pi-bluetooth
-apt-get --force-yes -y install locales console-common ntp openssh-server less vim parted raspberrypi4-kernel
+apt-get -y --force-yes install curl sudo binutils ca-certificates wget curl libraspberrypi-* nano git gnupg2 pi-bluetooth firmware-brcm80211
+apt-get --force-yes -y install locales console-common ntp openssh-server less vim parted raspberrypi-kernel raspberrypi-bootloader network-manager pi-bluetooth
 wget http://sanjay.seshan.org/debian/pool/main/r/raspi-config/raspi-config_20191116_all.deb
 dpkg -i raspi-config_20191116_all.deb
+echo 'dtoverlay=vc4-fkms-v3d' >> /boot/config.txt
+echo 'max_framebuffers=2' >> /boot/config.txt
+echo 'arm_64bit=1' >> /boot/config.txt
 echo 'pi  ALL=(ALL:ALL) ALL' >> /etc/sudoers
 sed -i -e 's/KERNEL\!=\"eth\*|/KERNEL\!=\"/' /lib/udev/rules.d/75-persistent-net-generator.rules
 rm -f /etc/udev/rules.d/70-persistent-net.rules
 rm -f third-stage
 "
-    elif [ "$pi_model" == "rpi3" ]; then 
-	installPkg="#!/bin/bash
-debconf-set-selections /debconf.set
-useradd -m -s /bin/bash pi
-echo 'root:raspberry' | chpasswd
-echo 'pi:raspberry' | chpasswd
-rm -f /debconf.set
-apt-get install -y wget gnupg2 binutils
-wget -O - http://sanjay.seshan.org/debian/pirepo.gpg.key | apt-key add -
-wget http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
-apt-key add raspberrypi.gpg.key
-apt-get update 
-apt-get download raspberrypi3-kernel
-dpkg -x raspberrypi3-* /tmp/
-rm raspberrypi3-*
-mv /tmp/boot/* /boot
-mv /tmp/lib/modules /lib/
-apt-get -y --force-yes install sudo curl binutils ca-certificates wget curl nano raspberrypi-firmware git gnupg2 pi-bluetooth
-apt-get --force-yes -y install locales console-common ntp openssh-server less vim parted
-wget http://sanjay.seshan.org/debian/pool/main/r/raspi-config/raspi-config_20191116_all.deb
-dpkg -i raspi-config_20191116_all.deb
-echo 'pi  ALL=(ALL:ALL) ALL' >> /etc/sudoers
-sed -i -e 's/KERNEL\!=\"eth\*|/KERNEL\!=\"/' /lib/udev/rules.d/75-persistent-net-generator.rules
-rm -f /etc/udev/rules.d/70-persistent-net.rules
-rm -f third-stage
-"
-    fi
-    
+   
 elif [ "$deb_arch" == "armhf" ]; then 
     installPkg="#!/bin/bash
 debconf-set-selections /debconf.set
@@ -151,7 +123,7 @@ apt-get install -y wget gnupg2 binutils curl
 wget http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
 apt-key add raspberrypi.gpg.key
 apt-get update 
-apt-get -y --force-yes install binutils ca-certificates wget raspi-config libraspberrypi-* nano git pi-bluetooth firmware-brcm80211 gnupg2
+apt-get -y --force-yes install binutils ca-certificates wget raspi-config libraspberrypi-* nano git pi-bluetooth firmware-brcm80211 gnupg2 network-manager
 wget http://raw.githubusercontent.com/Hexxeh/rpi-update/master/rpi-update -O /usr/bin/rpi-update
 chmod +x /usr/bin/rpi-update
 UPDATE_SELF=0 SKIP_BACKUP=1 /usr/bin/rpi-update
@@ -171,7 +143,7 @@ apt-get install -y wget gnupg2 binutils
 wget http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
 apt-key add raspberrypi.gpg.key
 apt-get update 
-apt-get -y --force-yes install binutils ca-certificates wget curl raspi-config nano gnupg2
+apt-get -y --force-yes install binutils ca-certificates wget curl raspi-config nano gnupg2 network-manager
 wget http://raw.githubusercontent.com/Hexxeh/rpi-update/master/rpi-update -O /usr/bin/rpi-update
 chmod +x /usr/bin/rpi-update
 UPDATE_SELF=0 SKIP_BACKUP=1 /usr/bin/rpi-update
@@ -183,7 +155,6 @@ rm -f /etc/udev/rules.d/70-persistent-net.rules
 rm -f third-stage
 "
 fi    
-
 
 #echo "$installPkg"
 
@@ -290,6 +261,7 @@ echo "deb $deb_mirror $deb_release main contrib non-free
 " > etc/apt/sources.list
 
 if [ "$deb_arch" == "arm64" ]; then 
+    echo "deb http://archive.raspberrypi.org/debian $deb_release main ui" >> etc/apt/sources.list
     echo "deb http://sanjay.seshan.org/debian/ $deb_release main" >> etc/apt/sources.list
 elif [ "$deb_arch" == "armhf" ]; then 
     echo "deb http://archive.raspberrypi.org/debian $deb_release main ui" >> etc/apt/sources.list
